@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { GoogleMap, LoadScript, Circle, InfoWindow, Marker } from '@react-google-maps/api'
+import { GoogleMap, Circle, InfoWindow, Marker, useJsApiLoader } from '@react-google-maps/api'
 import { NavLink } from 'react-router-dom'
 import '../css/index.css'
 import communityButton from '../assets/community.png'
@@ -38,6 +38,10 @@ const circles = [
 ]
 
 const Home = () => {
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: "AIzaSyCjqNB6gI0fYv37yoJkjoCvrw26-a2FT9Q"
+  })
+
   const [zoom, setZoom] = useState(17)
   const [center, setCenter] = useState(initialCenter)
   const [selectedCircle, setSelectedCircle] = useState(null)
@@ -100,6 +104,10 @@ const Home = () => {
     setSearchResults([])
   }
 
+  if (!isLoaded) {
+    return <div>Loading...</div>
+  }
+
   return (
     <div className="app">
       <input className='search-bar'
@@ -118,74 +126,72 @@ const Home = () => {
           ))}
         </ul>
       )}
-      <LoadScript googleMapsApiKey="AIzaSyCjqNB6gI0fYv37yoJkjoCvrw26-a2FT9Q">
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={center}
-          zoom={zoom}
-          options={mapOptions}
-          onLoad={map => (mapRef.current = map)}
-        >
-          {circles.map((circle) => (
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={center}
+        zoom={zoom}
+        options={mapOptions}
+        onLoad={map => (mapRef.current = map)}
+      >
+        {circles.map((circle) => (
+          <Circle
+            key={circle.id}
+            center={{ lat: circle.lat, lng: circle.lng }}
+            radius={hoveredCircleId === circle.id ? circle.radius * 1.05 : circle.radius}
+            options={{
+              fillColor: circle.color,
+              strokeColor: circle.stroke_color,
+              strokeWeight: 2,
+              clickable: true,
+              draggable: false,
+              editable: false,
+              visible: true,
+              zIndex: 1,
+            }}
+            onClick={() => handleCircleClick(circle)}
+            onMouseOver={() => handleMouseOver(circle.id)}
+            onMouseOut={handleMouseOut}
+          />
+        ))}
+        {currentLocation && (
+          <>
+            <Marker
+              position={currentLocation}
+              icon={{
+                url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+              }}
+            />
             <Circle
-              key={circle.id}
-              center={{ lat: circle.lat, lng: circle.lng }}
-              radius={hoveredCircleId === circle.id ? circle.radius * 1.05 : circle.radius}
+              center={currentLocation}
+              radius={10}
               options={{
-                fillColor: circle.color,
-                strokeColor: circle.stroke_color,
-                strokeWeight: 2,
-                clickable: true,
+                fillColor: 'rgba(0, 110, 255, 0.95)',
+                strokeWeight: 0,
+                clickable: false,
                 draggable: false,
                 editable: false,
                 visible: true,
-                zIndex: 1,
+                zIndex: 2,
               }}
-              onClick={() => handleCircleClick(circle)}
-              onMouseOver={() => handleMouseOver(circle.id)}
-              onMouseOut={handleMouseOut}
             />
-          ))}
-          {currentLocation && (
-            <>
-              <Marker
-                position={currentLocation}
-                icon={{
-                  url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
-                }}
-              />
-              <Circle
-                center={currentLocation}
-                radius={10}
-                options={{
-                  fillColor: 'rgba(0, 110, 255, 0.95)',
-                  strokeWeight: 0,
-                  clickable: false,
-                  draggable: false,
-                  editable: false,
-                  visible: true,
-                  zIndex: 2,
-                }}
-              />
-            </>
-          )}
-          {selectedCircle && (
-            <InfoWindow
-              position={{ lat: selectedCircle.lat, lng: selectedCircle.lng }}
-              onCloseClick={() => setSelectedCircle(null)}
-            >
-              <div className='info-window'>
-                <h2>{selectedCircle.title}</h2>
-                <p>{selectedCircle.description}</p>
-                <NavLink to="/bubbleinfo">
-                  <button>Join</button>
-                </NavLink>
-              </div>
-            </InfoWindow>
-          )}
-        </GoogleMap>
-      </LoadScript>
-      <NavLink className='community-button' to="/community">
+          </>
+        )}
+        {selectedCircle && (
+          <InfoWindow
+            position={{ lat: selectedCircle.lat, lng: selectedCircle.lng }}
+            onCloseClick={() => setSelectedCircle(null)}
+          >
+            <div className='info-window'>
+              <h2>{selectedCircle.title}</h2>
+              <p>{selectedCircle.description}</p>
+              <NavLink to="/bubbleinfo">
+                <button>Join</button>
+              </NavLink>
+            </div>
+          </InfoWindow>
+        )}
+      </GoogleMap>
+      <NavLink className='community-button' to="/communityhub">
         <img src={communityButton} alt="Community" className="community-button-image" />
       </NavLink>
     </div>
