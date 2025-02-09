@@ -1,10 +1,10 @@
 import React from 'react'
 import '../css/superbubble.css'
+import backgroundImage from '../assets/superbubble.png'
 
 const SuperBubble = () => {
   return (
-    <div>
-      <h1>Super Bubble</h1>
+    <div className='super-bubble' style={{ backgroundImage: `url(${backgroundImage})` }}>
     </div>
   )
 }

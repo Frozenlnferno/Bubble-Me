@@ -1,6 +1,35 @@
 .info-window {
-  color: black;
-  padding: 0px;
+  max-width: 200px;
+  padding: 10px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.info-window h2 {
+  margin: 0 0 10px;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.info-window p {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.info-window button {
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.info-window button:hover {
+  background-color: #0056b3;
 }
 
 .search {

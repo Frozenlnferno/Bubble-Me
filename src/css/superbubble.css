@@ -1,0 +1,12 @@
+.super-bubble {
+    background-image: url('../assets/supperbubble.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
