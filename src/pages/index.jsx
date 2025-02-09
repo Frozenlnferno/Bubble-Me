@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { GoogleMap, LoadScript, Circle, InfoWindow } from '@react-google-maps/api'
 import { NavLink } from 'react-router-dom'
+import '../css/index.css'
 
 const containerStyle = {
   width: '100vw',
@@ -21,16 +22,18 @@ const mapOptions = {
 }
 
 const circles = [
-  { lat: 40.694203, lng: -73.986579, radius: 50, info: 'Circle 1 Info', title: 'Circle 1', description: 'Description for Circle 1' },
-  { lat: 40.695203, lng: -73.987579, radius: 100, info: 'Circle 2 Info', title: 'Circle 2', description: 'Description for Circle 2' },
+  { id: 1, lat: 40.694203, lng: -73.986579, radius: 50, color: 'rgba(255, 0, 0, 0.5)', stroke_color: 'rgba(255, 0, 0, 0.8)', title: 'NYU Hackathon', description: 'Location for NYU Hackathon 2025' },
+  { id: 2, lat: 40.695203, lng: -73.987579, radius: 50, color: 'rgba(0, 200, 255, 0.5)', stroke_color: 'rgba(0, 200, 255, 0.8)', title: 'Circle 2', description: 'Description for Circle 2' },
+  { id: 3, lat: 40.693203, lng: -73.987579, radius: 50, color: 'rgba(0, 255, 68, 0.5)', stroke_color: 'rgba(0, 255, 68, 0.8)', title: 'Free Pizza!', description: 'Free pizza mon-fri during dinner' },
   // Add more circles as needed
 ]
 
 const Home = () => {
-  const [zoom, setZoom] = useState(10)
+  const [zoom, setZoom] = useState(17)
   const [center, setCenter] = useState(initialCenter)
   const [selectedCircle, setSelectedCircle] = useState(null)
-  const [hoveredCircle, setHoveredCircle] = useState(null)
+  const [hoveredCircleId, setHoveredCircleId] = useState(null)
+  const [searchTerm, setSearchTerm] = useState('')
   const mapRef = useRef(null)
 
   const handleCircleClick = (circle) => {
@@ -40,16 +43,32 @@ const Home = () => {
     }
   }
 
-  const handleMouseOver = (circle) => {
-    setHoveredCircle(circle)
+  const handleMouseOver = (circleId) => {
+    setHoveredCircleId(circleId)
   }
 
   const handleMouseOut = () => {
-    setHoveredCircle(null)
+    setHoveredCircleId(null)
   }
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value)
+  }
+
+  const filteredCircles = circles.filter(circle =>
+    circle.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    circle.description.toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
   return (
     <div className="app">
+      <input
+        type="text"
+        placeholder="Search circles..."
+        value={searchTerm}
+        onChange={handleSearchChange}
+        style={{ position: 'absolute', top: '10px', left: '10px', zIndex: 1000 }}
+      />
       <LoadScript googleMapsApiKey="AIzaSyCjqNB6gI0fYv37yoJkjoCvrw26-a2FT9Q">
         <GoogleMap
           mapContainerStyle={containerStyle}
@@ -58,14 +77,14 @@ const Home = () => {
           options={mapOptions}
           onLoad={map => (mapRef.current = map)}
         >
-          {circles.map((circle, index) => (
+          {filteredCircles.map((circle) => (
             <Circle
-              key={index}
+              key={circle.id}
               center={{ lat: circle.lat, lng: circle.lng }}
-              radius={hoveredCircle === circle ? circle.radius * 1.5 : circle.radius}
+              radius={hoveredCircleId === circle.id ? circle.radius * 1.05 : circle.radius}
               options={{
-                fillColor: 'rgba(255, 0, 0, 0.5)',
-                strokeColor: 'rgba(255, 0, 0, 0.8)',
+                fillColor: circle.color,
+                strokeColor: circle.stroke_color,
                 strokeWeight: 2,
                 clickable: true,
                 draggable: false,
@@ -74,7 +93,7 @@ const Home = () => {
                 zIndex: 1,
               }}
               onClick={() => handleCircleClick(circle)}
-              onMouseOver={() => handleMouseOver(circle)}
+              onMouseOver={() => handleMouseOver(circle.id)}
               onMouseOut={handleMouseOut}
             />
           ))}
@@ -83,7 +102,7 @@ const Home = () => {
               position={{ lat: selectedCircle.lat, lng: selectedCircle.lng }}
               onCloseClick={() => setSelectedCircle(null)}
             >
-              <div>
+              <div className='info-window'>
                 <h2>{selectedCircle.title}</h2>
                 <p>{selectedCircle.description}</p>
                 <NavLink to="/BubbleInfo">
