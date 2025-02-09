@@ -105,7 +105,7 @@ const Home = () => {
               <div className='info-window'>
                 <h2>{selectedCircle.title}</h2>
                 <p>{selectedCircle.description}</p>
-                <NavLink to="/BubbleInfo">
+                <NavLink to="/bubbleinfo">
                   <button>Join</button>
                 </NavLink>
               </div>
