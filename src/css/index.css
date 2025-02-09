@@ -16,15 +16,17 @@
   margin: 0 0 10px;
   font-size: 0.9rem;
   color: #666;
+  text-align: left;
 }
 
 .info-window button {
-  padding: 8px 12px;
+  padding: 8px 25px 8px 25px;
   font-size: 0.9rem;
+  text-align: center;
   color: white;
   background-color: #007bff;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
 }
 
@@ -84,4 +86,39 @@
 
 .search-results li:hover {
   background-color: #f0f0f0;
+}
+
+.info-window button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.info-window button:hover {
+  background-color: #0056b3;
+}
+
+.community-button {
+  position: absolute;
+  bottom: 25px;
+  left: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.community-button-image {
+  width: 90px;
+  height: 60px; 
+  cursor: pointer;
+  transition: border 0.3s ease;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.community-button-image:hover {
+  border: 1px solid black;
 }
