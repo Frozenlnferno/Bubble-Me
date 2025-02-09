@@ -2,3 +2,57 @@
   color: black;
   padding: 0px;
 }
+
+.search {
+  color: black;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.search-bar {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  width: 304px;
+  padding: 8px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: black;
+  font-size: 16px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-bar:focus {
+  border-color: #494949;
+  outline: none;
+}
+
+.search-results {
+  position: absolute;
+  top: 50px;
+  left: 10px;
+  z-index: 1000;
+  width: 300px;
+  background-color: white;
+  list-style-type: none;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.search-results li {
+  cursor: pointer;
+  padding: 10px;
+  border-bottom: 1px solid #565656;
+}
+
+.search-results li:hover {
+  background-color: #f0f0f0;
+}

@@ -22,9 +22,9 @@ const mapOptions = {
 }
 
 const circles = [
-  { id: 1, lat: 40.694203, lng: -73.986579, radius: 50, color: 'rgba(255, 0, 0, 0.5)', stroke_color: 'rgba(255, 0, 0, 0.8)', title: 'NYU Hackathon', description: 'Location for NYU Hackathon 2025' },
+  { id: 1, lat: 40.694203, lng: -73.986579, radius: 50, color: 'rgba(255, 0, 0, 0.5)', stroke_color: 'rgba(255, 0, 0, 0.8)', title: 'NYU Hackathon', description: 'Location for NYU Hackathon 2025. Date: 2/8/25-2/9/25' },
   { id: 2, lat: 40.695203, lng: -73.987579, radius: 50, color: 'rgba(0, 200, 255, 0.5)', stroke_color: 'rgba(0, 200, 255, 0.8)', title: 'Circle 2', description: 'Description for Circle 2' },
-  { id: 3, lat: 40.693203, lng: -73.987579, radius: 50, color: 'rgba(0, 255, 68, 0.5)', stroke_color: 'rgba(0, 255, 68, 0.8)', title: 'Free Pizza!', description: 'Free pizza mon-fri during dinner' },
+  { id: 3, lat: 40.692203, lng: -73.98710, radius: 30, color: 'rgba(0, 255, 68, 0.5)', stroke_color: 'rgba(0, 255, 68, 0.8)', title: 'Supreme Pizza', description: 'Free pizza mon-fri during dinner' },
   // Add more circles as needed
 ]
 
@@ -34,6 +34,7 @@ const Home = () => {
   const [selectedCircle, setSelectedCircle] = useState(null)
   const [hoveredCircleId, setHoveredCircleId] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
+  const [searchResults, setSearchResults] = useState([])
   const mapRef = useRef(null)
 
   const handleCircleClick = (circle) => {
@@ -52,23 +53,45 @@ const Home = () => {
   }
 
   const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value)
+    const searchTerm = event.target.value
+    setSearchTerm(searchTerm)
+    if (searchTerm) {
+      const results = circles.filter(circle =>
+        circle.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        circle.description.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+      setSearchResults(results)
+    } else {
+      setSearchResults([])
+    }
   }
 
-  const filteredCircles = circles.filter(circle =>
-    circle.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    circle.description.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  const handleSearchResultClick = (circle) => {
+    setSelectedCircle(circle)
+    setCenter({ lat: circle.lat, lng: circle.lng })
+    setZoom(18)
+    setSearchTerm('')
+    setSearchResults([])
+  }
 
   return (
     <div className="app">
-      <input
+      <input className='search-bar'
         type="text"
-        placeholder="Search circles..."
+        placeholder="Search bubbles..."
         value={searchTerm}
         onChange={handleSearchChange}
         style={{ position: 'absolute', top: '10px', left: '10px', zIndex: 1000 }}
       />
+      {searchResults.length > 0 && (
+        <ul className="search-results" style={{ position: 'absolute', top: '40px', left: '10px', zIndex: 1000, backgroundColor: 'white', listStyleType: 'none', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}>
+          {searchResults.map((circle) => (
+            <li className='search' key={circle.id} onClick={() => handleSearchResultClick(circle)} style={{ cursor: 'pointer', padding: '5px 0' }}>
+              {circle.title}
+            </li>
+          ))}
+        </ul>
+      )}
       <LoadScript googleMapsApiKey="AIzaSyCjqNB6gI0fYv37yoJkjoCvrw26-a2FT9Q">
         <GoogleMap
           mapContainerStyle={containerStyle}
@@ -77,7 +100,7 @@ const Home = () => {
           options={mapOptions}
           onLoad={map => (mapRef.current = map)}
         >
-          {filteredCircles.map((circle) => (
+          {circles.map((circle) => (
             <Circle
               key={circle.id}
               center={{ lat: circle.lat, lng: circle.lng }}
