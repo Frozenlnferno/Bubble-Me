@@ -3,15 +3,18 @@ import { GoogleMap, LoadScript, Circle, InfoWindow } from '@react-google-maps/ap
 import { NavLink } from 'react-router-dom'
 import '../css/index.css'
 
+
 const containerStyle = {
   width: '100vw',
   height: '100vh'
 }
 
+
 const initialCenter = {
   lat: 40.694203,
   lng: -73.986579
 }
+
 
 const mapOptions = {
   streetViewControl: false, // Disable Street View control
@@ -21,12 +24,14 @@ const mapOptions = {
   scaleControl: true, // Enable scale control
 }
 
+
 const circles = [
   { id: 1, lat: 40.694203, lng: -73.986579, radius: 50, color: 'rgba(255, 0, 0, 0.5)', stroke_color: 'rgba(255, 0, 0, 0.8)', title: 'NYU Hackathon', description: 'Location for NYU Hackathon 2025. Date: 2/8/25-2/9/25' },
   { id: 2, lat: 40.695203, lng: -73.987579, radius: 50, color: 'rgba(0, 200, 255, 0.5)', stroke_color: 'rgba(0, 200, 255, 0.8)', title: 'Circle 2', description: 'Description for Circle 2' },
   { id: 3, lat: 40.692203, lng: -73.98710, radius: 30, color: 'rgba(0, 255, 68, 0.5)', stroke_color: 'rgba(0, 255, 68, 0.8)', title: 'Supreme Pizza', description: 'Free pizza mon-fri during dinner' },
   // Add more circles as needed
 ]
+
 
 const Home = () => {
   const [zoom, setZoom] = useState(17)
@@ -37,6 +42,7 @@ const Home = () => {
   const [searchResults, setSearchResults] = useState([])
   const mapRef = useRef(null)
 
+
   const handleCircleClick = (circle) => {
     setSelectedCircle(circle)
     if (mapRef.current) {
@@ -44,13 +50,16 @@ const Home = () => {
     }
   }
 
+
   const handleMouseOver = (circleId) => {
     setHoveredCircleId(circleId)
   }
 
+
   const handleMouseOut = () => {
     setHoveredCircleId(null)
   }
+
 
   const handleSearchChange = (event) => {
     const searchTerm = event.target.value
@@ -66,6 +75,7 @@ const Home = () => {
     }
   }
 
+
   const handleSearchResultClick = (circle) => {
     setSelectedCircle(circle)
     setCenter({ lat: circle.lat, lng: circle.lng })
@@ -73,6 +83,7 @@ const Home = () => {
     setSearchTerm('')
     setSearchResults([])
   }
+
 
   return (
     <div className="app">
@@ -140,5 +151,5 @@ const Home = () => {
   )
 }
 
-export default Home
 
+export default Home
