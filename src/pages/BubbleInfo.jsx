@@ -1,4 +1,5 @@
 import React from 'react'
+import '../css/bubbleinfo.css'
 
 const BubbleInfo = () => {
   return (
