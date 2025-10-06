@@ -39,7 +39,7 @@ const circles = [
 
 const Home = () => {
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyCjqNB6gI0fYv37yoJkjoCvrw26-a2FT9Q"
+    googleMapsApiKey: ""
   })
 
   const [zoom, setZoom] = useState(17)
